@@ -1,9 +1,9 @@
 'use strict';
 
-var rowCount = 20;
-var columnCount = 20;
-var width = 200;
-var height = 200;
+var rowCount = 100;
+var columnCount = 100;
+var width = 800;
+var height = 800;
 var size = width / rowCount;
 
 var canvas = document.getElementById('game');
@@ -11,7 +11,7 @@ canvas.width = width;
 canvas.height = height;
 var context = canvas.getContext('2d');
 
-var activeCells = [[10, 10], [11,10], [12,10], [11,11]];
+var activeCells = [[50, 50], [51,50], [51,48], [53,49], [54, 50], [55,50], [56,50]];
 
 function getNeighbors(cell){
   var neighbors = [];
@@ -77,6 +77,8 @@ function draw (){
 
 function tick(timestamp){
   draw();
+  activeCells=next(activeCells);
   window.requestAnimationFrame(tick);
 }
+//setInterval(()=>{activeCells = next(activeCells);}, 100);
 window.requestAnimationFrame(tick);
