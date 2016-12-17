@@ -1,27 +1,27 @@
 'use strict';
 
-var rowCount = 100;
-var columnCount = 100;
-var width = 800;
-var height = 800;
-var size = width / rowCount;
+var rowCount=100;
+var columnCount=100;
+var width=800;
+var height=800;
+var size=width/rowCount;
 
-var canvas = document.getElementById('game');
-canvas.width = width;
-canvas.height = height;
-var context = canvas.getContext('2d');
+var canvas=document.getElementById('game');
+canvas.width=width;
+canvas.height=height;
+var context=canvas.getContext('2d');
 
-var activeCells = [[50, 50], [51,50], [51,48], [53,49], [54, 50], [55,50], [56,50]];
+var activeCells = [[50, 50],[51,50],[51,48],[53,49],[54, 50],[55,50],[56,50]];
 
 function getNeighbors(cell){
-  var neighbors = [];
-  var [cellX, cellY] = cell;
-  for(var x = cellX - 1; x <= cellX + 1; x++){
-    for(var y = cellY - 1; y <= cellY + 1; y++){
-      neighbors.push([x, y].join(','));
+  var neighbors=[];
+  var [cellX,cellY]=cell;
+  for(var x=cellX-1; x<=cellX+1; x++){
+    for(var y=cellY-1; y<=cellY+1; y++){
+      neighbors.push([x,y].join(','));
     }
   }
-  neighbors.splice(4, 1);
+  neighbors.splice(4,1);
   return neighbors;
 }
 
@@ -30,24 +30,24 @@ function getNeighbors(cell){
 // more or less dies
 // 3 neighbors is born
 function next(currentCells){
-  var candidates = {};
-  var nextCells = [];
+  var candidates={};
+  var nextCells=[];
   currentCells.forEach(cell=>{
-    var neighbors = getNeighbors(cell);
+    var neighbors=getNeighbors(cell);
     neighbors.forEach(neighbor=>{
       if(candidates[neighbor]){
         candidates[neighbor]++;
       } else {
-        candidates[neighbor] = 1;
+        candidates[neighbor]=1;
       }
     });
   });
-  var cellKeys = currentCells.map(cell=>cell.join(','));
+  var cellKeys=currentCells.map(cell=>cell.join(','));
   for(var candidate in candidates){
-    var count = candidates[candidate];
+    var count=candidates[candidate];
     switch(count){
       case 2:
-        if(cellKeys.indexOf(candidate) === -1){
+        if(cellKeys.indexOf(candidate)===-1){
           continue;
         }
       case 3:
@@ -57,18 +57,18 @@ function next(currentCells){
   return nextCells;
 }
 
-var tickButton = document.getElementById('tick');
-tickButton.addEventListener('click', ()=>{
-  activeCells = next(activeCells);
+var tickButton=document.getElementById('tick');
+tickButton.addEventListener('click',()=>{
+  activeCells=next(activeCells);
 });
 
-function draw (){
-  context.clearRect(0, 0, width, height);
+function draw(){
+  context.clearRect(0,0,width,height);
   activeCells.forEach(cell=>{
-    var [x, y] = cell;
+    var [x,y]=cell;
     context.fillRect(
-      size * x,
-      size * y,
+      size*x,
+      size*y,
       size,
       size
     );
