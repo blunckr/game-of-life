@@ -5,11 +5,11 @@
     var neighbors=[];
     for(var x=cell[0]-1; x<=cell[0]+1; x++){
       for(var y=cell[1]-1; y<=cell[1]+1; y++){
-        neighbors.push([x,y].join(','));
+        neighbors.push([x, y].join(','));
       }
     }
     // remove current cell, position is always the same
-    neighbors.splice(4,1);
+    neighbors.splice(4, 1);
     return neighbors;
   }
 
@@ -45,9 +45,9 @@
   }
 
   function draw(context, activeCells, cellSize){
-    context.clearRect(0,0,context.canvas.width,context.canvas.height);
+    context.clearRect(0, 0, context.canvas.width, context.canvas.height);
     activeCells.forEach(cell=>{
-      var [x,y]=cell;
+      var [x, y]=cell;
       context.fillRect(
         cellSize*x,
         cellSize*y,
@@ -59,27 +59,39 @@
 
 
   function main(){
-    var rowCount=100;
-    var columnCount=100;
-    var width=800;
-    var height=800;
-    var cellSize=width/rowCount;
+    var width=window.innerWidth;
+    var height=window.innerHeight;
+    var cellSize=5;
+    var playing=false;
 
     var canvas=document.getElementById('game');
     canvas.width=width;
     canvas.height=height;
     var context=canvas.getContext('2d');
 
+    var activeCells=[];
+    // var activeCells = [[50, 50],[51,50],[51,48],[53,49],[54, 50],[55,50],[56,50]];
+    canvas.addEventListener('click', (e)=>{
+      var x=e.offsetX/cellSize;
+      var y=e.offsetY/cellSize;
+      activeCells.push([Math.floor(x), Math.floor(y)]);
+    });
+
     var tickButton=document.getElementById('tick');
-    tickButton.addEventListener('click',()=>{
+    tickButton.addEventListener('click', ()=>{
       activeCells=nextGen(activeCells);
     });
 
-    var activeCells = [[50, 50],[51,50],[51,48],[53,49],[54, 50],[55,50],[56,50]];
+    var playButton=document.getElementById('play');
+    playButton.addEventListener('click', ()=>{
+      playing=!playing;
+    });
 
     function tick(){
-      draw(context,activeCells,cellSize);
-      activeCells=nextGen(activeCells);
+      draw(context, activeCells, cellSize);
+      if(playing){
+        activeCells=nextGen(activeCells);
+      }
       window.requestAnimationFrame(tick);
     }
 
