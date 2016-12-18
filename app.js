@@ -59,14 +59,12 @@
 
 
   function main(){
-    var width=window.innerWidth;
-    var height=window.innerHeight;
     var cellSize=5;
     var playing=false;
 
     var canvas=document.getElementById('game');
-    canvas.width=width;
-    canvas.height=height;
+    canvas.width=window.innerWidth;
+    canvas.height=window.innerHeight;
     var context=canvas.getContext('2d');
 
     var activeCells=[];
@@ -86,6 +84,19 @@
     playButton.addEventListener('click', ()=>{
       playing=!playing;
     });
+
+    var sizeInput=document.getElementById('cell-size');
+    sizeInput.addEventListener('keyup', function(e){
+      var value = parseInt(e.target.value);
+      if(!isNaN(value)){
+        cellSize=value;
+      }
+    });
+
+    window.onresize=function(){
+      canvas.width=window.innerWidth;
+      canvas.height=window.innerHeight;
+    }
 
     function tick(){
       draw(context, activeCells, cellSize);
