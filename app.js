@@ -1,6 +1,10 @@
 'use strict';
 
 (function(){
+  function matchCells(cell1, cell2){
+    return cell1[0]===cell2[0] && cell1[1]===cell2[1];
+  }
+
   function getNeighbors(cell){
     var neighbors=[];
     for(var x=cell[0]-1; x<=cell[0]+1; x++){
@@ -72,7 +76,13 @@
     canvas.addEventListener('click', (e)=>{
       var x=e.offsetX/cellSize;
       var y=e.offsetY/cellSize;
-      activeCells.push([Math.floor(x), Math.floor(y)]);
+      var newCell=[Math.floor(x), Math.floor(y)];
+      var cellIndex = activeCells.findIndex(cell=> matchCells(cell, newCell));
+      if(cellIndex===-1){
+        activeCells.push(newCell);
+      }else{
+        activeCells.splice(cellIndex, 1);
+      }
     });
 
     var tickButton=document.getElementById('tick');
@@ -86,7 +96,7 @@
     });
 
     var sizeInput=document.getElementById('cell-size');
-    sizeInput.addEventListener('keyup', function(e){
+    sizeInput.addEventListener('keyup', (e)=>{
       var value = parseInt(e.target.value);
       if(!isNaN(value)){
         cellSize=value;
