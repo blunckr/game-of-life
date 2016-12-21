@@ -24,16 +24,18 @@
   function nextGen(currentCells){
     var candidates={};
     var nextCells=[];
-    currentCells.forEach(cell=>{
+    for(var i=0; i<currentCells.length; i++){
+      var cell = currentCells[i];
       var neighbors=getNeighbors(cell);
-      neighbors.forEach(neighbor=>{
+      for(var j=0; j<neighbors.length; j++){
+        var neighbor = neighbors[j];
         if(candidates[neighbor]){
           candidates[neighbor]++;
         } else {
           candidates[neighbor]=1;
         }
-      });
-    });
+      };
+    };
     var cellKeys=currentCells.map(cell=>cell.join(','));
     for(var candidate in candidates){
       switch(candidates[candidate]){
@@ -50,15 +52,15 @@
 
   function draw(context, activeCells, cellSize){
     context.clearRect(0, 0, context.canvas.width, context.canvas.height);
-    activeCells.forEach(cell=>{
-      var [x, y]=cell;
+    for(var i=0; i<activeCells.length; i++){
+      var cell = activeCells[i];
       context.fillRect(
-        cellSize*x,
-        cellSize*y,
+        cellSize*cell[0],
+        cellSize*cell[1],
         cellSize,
         cellSize
       );
-    });
+    };
   }
 
 
