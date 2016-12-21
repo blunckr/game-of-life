@@ -71,8 +71,8 @@
     canvas.height=window.innerHeight;
     var context=canvas.getContext('2d');
 
-    var activeCells=[];
-    // var activeCells = [[50, 50],[51,50],[51,48],[53,49],[54, 50],[55,50],[56,50]];
+    //var activeCells=[];
+    var activeCells = [[50, 50],[51,50],[51,48],[53,49],[54, 50],[55,50],[56,50]];
     canvas.addEventListener('click', (e)=>{
       var x=e.offsetX/cellSize;
       var y=e.offsetY/cellSize;
@@ -93,6 +93,11 @@
     var playButton=document.getElementById('play');
     playButton.addEventListener('click', ()=>{
       playing=!playing;
+    });
+
+    var clearButton=document.getElementById('clear');
+    clearButton.addEventListener('click', ()=>{
+      activeCells = [];
     });
 
     var sizeInput=document.getElementById('cell-size');
