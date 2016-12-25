@@ -70,7 +70,7 @@
 
     var canvas=document.getElementById('game');
     canvas.width=window.innerWidth;
-    canvas.height=window.innerHeight;
+    canvas.height=window.innerHeight-50;
     var context=canvas.getContext('2d');
 
     //var activeCells=[];
@@ -87,14 +87,22 @@
       }
     });
 
+    function tick(){
+      activeCells=nextGen(activeCells);
+    }
+
+    function togglePlay(){
+      playing=!playing;
+    }
+
     var tickButton=document.getElementById('tick');
     tickButton.addEventListener('click', ()=>{
-      activeCells=nextGen(activeCells);
+      tick();
     });
 
     var playButton=document.getElementById('play');
     playButton.addEventListener('click', ()=>{
-      playing=!playing;
+      togglePlay();
     });
 
     var clearButton=document.getElementById('clear');
@@ -112,18 +120,35 @@
 
     window.onresize=function(){
       canvas.width=window.innerWidth;
-      canvas.height=window.innerHeight;
+      canvas.height=window.innerHeight-50;
     }
 
-    function tick(){
+    // using keypress because it repeats
+    document.addEventListener('keypress', e=>{
+      if(e.key===' '){
+        if(playing){
+          togglePlay();
+        }else{
+          tick();
+        }
+      }
+    });
+
+    document.addEventListener('keyup', e=>{
+      if(e.key==='Enter'){
+        togglePlay();
+      }
+    });
+
+    function animate(){
       draw(context, activeCells, cellSize);
       if(playing){
-        activeCells=nextGen(activeCells);
+        tick();
       }
-      window.requestAnimationFrame(tick);
+      window.requestAnimationFrame(animate);
     }
 
-    window.requestAnimationFrame(tick);
+    window.requestAnimationFrame(animate);
   }
 
   main();
