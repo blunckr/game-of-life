@@ -9,7 +9,7 @@
     var neighbors=[];
     for(var x=cell[0]-1; x<=cell[0]+1; x++){
       for(var y=cell[1]-1; y<=cell[1]+1; y++){
-        neighbors.push([x, y].join(','));
+        neighbors.push([x, y]);
       }
     }
     // remove current cell, position is always the same
@@ -30,21 +30,22 @@
       for(var j=0; j<neighbors.length; j++){
         var neighbor = neighbors[j];
         if(candidates[neighbor]){
-          candidates[neighbor]++;
+          candidates[neighbor].count++;
         } else {
-          candidates[neighbor]=1;
+          candidates[neighbor]={cell:neighbor, count:1};
         }
       };
     };
     var cellKeys=currentCells.map(cell=>cell.join(','));
-    for(var candidate in candidates){
-      switch(candidates[candidate]){
+    for(var key in candidates){
+      var candidate=candidates[key];
+      switch(candidate.count){
         case 2:
-          if(cellKeys.indexOf(candidate)===-1){
+          if(cellKeys.indexOf(key)===-1){
             continue;
           }
         case 3:
-          nextCells.push(candidate.split(',').map(x=>parseInt(x)));
+          nextCells.push(candidate.cell);
       }
     }
     return nextCells;
