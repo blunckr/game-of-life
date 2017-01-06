@@ -64,27 +64,42 @@
     };
   }
 
+  var presets={
+    Blinker: [[-1, 0], [0, 0], [1, 0]]
+  };
 
   function main(){
     var cellSize=5;
     var playing=false;
+    var currentPreset=presets.Blinker;
+    // currentPreset=null;
 
     var canvas=document.getElementById('game');
     canvas.width=window.innerWidth;
     canvas.height=window.innerHeight-50;
     var context=canvas.getContext('2d');
 
-    //var activeCells=[];
-    var activeCells = [[50, 50],[51,50],[51,48],[53,49],[54, 50],[55,50],[56,50]];
+    var activeCells=[];
     canvas.addEventListener('click', (e)=>{
-      var x=e.offsetX/cellSize;
-      var y=e.offsetY/cellSize;
-      var newCell=[Math.floor(x), Math.floor(y)];
-      var cellIndex = activeCells.findIndex(cell=> matchCells(cell, newCell));
-      if(cellIndex===-1){
-        activeCells.push(newCell);
+      var x=Math.floor(e.offsetX/cellSize);
+      var y=Math.floor(e.offsetY/cellSize);
+      if(currentPreset){
+        for(var i=0; i<currentPreset.length; i++){
+          var child=currentPreset[i];
+          var newCell=[child[0]+x, child[1]+y]
+          var cellIndex=activeCells.findIndex(cell=> matchCells(cell, newCell));
+          if(cellIndex===-1){
+            activeCells.push(newCell);
+          }
+        }
       }else{
-        activeCells.splice(cellIndex, 1);
+        var newCell=[x, y];
+        var cellIndex=activeCells.findIndex(cell=> matchCells(cell, newCell));
+        if(cellIndex===-1){
+          activeCells.push(newCell);
+        }else{
+          activeCells.splice(cellIndex, 1);
+        }
       }
     });
 
