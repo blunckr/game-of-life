@@ -62,6 +62,34 @@
         cellSize
       );
     };
+
+    context.beginPath();
+    var yPos=-1;
+    var xPos=-1;
+    context.moveTo(xPos, yPos);
+    while(yPos<context.canvas.height){
+      if(xPos===-1){
+        xPos=context.canvas.width+1;
+      }else{
+        xPos=-1;
+      }
+      context.lineTo(xPos,yPos);
+      yPos+=cellSize;
+      context.lineTo(xPos,yPos);
+    }
+    xPos=-1;
+    context.lineTo(xPos,yPos);
+    while(xPos<context.canvas.width){
+      if(yPos===-1){
+        yPos=context.canvas.height+1;
+      }else{
+        yPos=-1;
+      }
+      context.lineTo(xPos,yPos);
+      xPos+=cellSize;
+      context.lineTo(xPos,yPos);
+    }
+    context.stroke();
   }
 
   var presets={
@@ -71,7 +99,7 @@
   };
 
   function main(){
-    var cellSize=5;
+    var cellSize=15;
     var playing=false;
     var currentPreset=presets['Diehard'];
     // currentPreset=null;
@@ -107,6 +135,7 @@
 
     function tick(){
       activeCells=nextGen(activeCells);
+      window.activeCells=activeCells;
     }
 
     function togglePlay(){
