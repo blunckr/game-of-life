@@ -80,18 +80,26 @@
     }
   }
 
-  var presets={
+  var patterns={
     'R-pentomino':[[0,0], [0,-1], [1,-1], [-1,0], [0,1]],
     'Acorn':[[1,0], [2,0], [3,0], [0,-1], [1,0], [-2,-2], [-2,0], [-3,0]],
     'Diehard':[[-3,0], [-2,0], [-2,1], [2,1], [3,1], [4,1], [3,-1]],
     'Gospers Glider Gun':[[-17,0],[-17,1],[-16,1],[-16,0],[-7,0],[-7,1],[-7,2],[-6,3],[-6,-1],[-5,-2],[-4,-2],[-5,4],[-4,4],[-3,1],[-2,-1],[-2,3],[-1,2],[-1,1],[-1,0],[0,1],[3,0],[4,0],[3,-1],[4,-1],[3,-2],[4,-2],[5,-3],[5,1],[7,1],[7,2],[7,-3],[7,-4],[17,-2],[18,-2],[18,-1],[17,-1]]
   };
 
+  function populatePatterns(patternBox){
+    for(var patternName in patterns){
+      var option = document.createElement('OPTION');
+      option.value=patternName;
+      option.innerText=patternName;
+      patternBox.appendChild(option);
+    }
+  }
+
   function main(){
     var cellSize=15;
     var playing=false;
-    var currentPreset=presets['Gospers Glider Gun'];
-    // currentPreset=null;
+    var currentPattern='Acorn';
     var drawGrid=true;
 
     var canvas=document.getElementById('game');
@@ -103,9 +111,10 @@
     canvas.addEventListener('click', (e)=>{
       var x=Math.floor(e.offsetX/cellSize);
       var y=Math.floor(e.offsetY/cellSize);
-      if(currentPreset){
-        for(var i=0; i<currentPreset.length; i++){
-          var child=currentPreset[i];
+      var pattern=patterns[currentPattern];
+      if(pattern){
+        for(var i=0; i<pattern.length; i++){
+          var child=pattern[i];
           var newCell=[child[0]+x, child[1]+y]
           var cellIndex=activeCells.findIndex(cell=> matchCells(cell, newCell));
           if(cellIndex===-1){
@@ -159,6 +168,13 @@
         cellSize=value;
       }
     });
+
+    var patternBox=document.getElementById('patterns');
+    populatePatterns(patternBox);
+    patternBox.addEventListener('change', e=>{
+      currentPattern=e.target.value;
+    });
+    patternBox.value=currentPattern;
 
     window.onresize=function(){
       canvas.width=window.innerWidth;
