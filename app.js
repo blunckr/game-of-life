@@ -36,7 +36,7 @@
         }
       };
     };
-    var cellKeys=currentCells.map(cell=>cell.join(','));
+    var cellKeys=currentCells.map(function(cell){return cell.join(',')});
     for(var key in candidates){
       var candidate=candidates[key];
       switch(candidate.count){
@@ -97,7 +97,7 @@
   }
 
   function main(){
-    var cellSize=15;
+    var cellSize=10;
     var playing=false;
     var currentPattern='Acorn';
     var drawGrid=true;
@@ -108,7 +108,7 @@
     var context=canvas.getContext('2d');
 
     var activeCells=[];
-    canvas.addEventListener('click', (e)=>{
+    canvas.addEventListener('click', function(e){
       var x=Math.floor(e.offsetX/cellSize);
       var y=Math.floor(e.offsetY/cellSize);
       var pattern=patterns[currentPattern];
@@ -116,14 +116,18 @@
         for(var i=0; i<pattern.length; i++){
           var child=pattern[i];
           var newCell=[child[0]+x, child[1]+y]
-          var cellIndex=activeCells.findIndex(cell=> matchCells(cell, newCell));
+          var cellIndex=activeCells.findIndex(function(cell){
+            return matchCells(cell, newCell);
+          });
           if(cellIndex===-1){
             activeCells.push(newCell);
           }
         }
       }else{
         var newCell=[x, y];
-        var cellIndex=activeCells.findIndex(cell=> matchCells(cell, newCell));
+        var cellIndex=activeCells.findIndex(function(cell){
+          return matchCells(cell, newCell);
+        });
         if(cellIndex===-1){
           activeCells.push(newCell);
         }else{
@@ -142,27 +146,27 @@
     }
 
     var tickButton=document.getElementById('tick');
-    tickButton.addEventListener('click', ()=>{
+    tickButton.addEventListener('click', function(){
       tick();
     });
 
     var playButton=document.getElementById('play');
-    playButton.addEventListener('click', ()=>{
+    playButton.addEventListener('click', function(){
       togglePlay();
     });
 
     var clearButton=document.getElementById('clear');
-    clearButton.addEventListener('click', ()=>{
+    clearButton.addEventListener('click', function(){
       activeCells=[];
     });
 
     var gridCheckbox=document.getElementById('draw-grid');
-    gridCheckbox.addEventListener('click', e=>{
+    gridCheckbox.addEventListener('click', function(e){
       drawGrid=e.target.checked;
     });
 
     var sizeInput=document.getElementById('cell-size');
-    sizeInput.addEventListener('keyup', (e)=>{
+    sizeInput.addEventListener('keyup', function(e){
       var value = parseInt(e.target.value);
       if(!isNaN(value)){
         cellSize=value;
@@ -171,7 +175,7 @@
 
     var patternBox=document.getElementById('patterns');
     populatePatterns(patternBox);
-    patternBox.addEventListener('change', e=>{
+    patternBox.addEventListener('change', function(e){
       currentPattern=e.target.value;
     });
     patternBox.value=currentPattern;
@@ -182,7 +186,7 @@
     }
 
     // using keypress because it repeats
-    document.addEventListener('keypress', e=>{
+    document.addEventListener('keypress', function(e){
       if(e.key===' '){
         if(playing){
           togglePlay();
@@ -192,7 +196,7 @@
       }
     });
 
-    document.addEventListener('keyup', e=>{
+    document.addEventListener('keyup', function(e){
       if(e.key==='Enter'){
         togglePlay();
       }
