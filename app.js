@@ -51,8 +51,10 @@
     return nextCells;
   }
 
-  function draw(context, activeCells, cellSize){
-    context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+  function draw(context, activeCells, cellSize, drawGrid){
+    var width=context.canvas.width;
+    var height=context.canvas.height;
+    context.clearRect(0, 0, width, height);
     for(var i=0; i<activeCells.length; i++){
       var cell = activeCells[i];
       context.fillRect(
@@ -63,46 +65,34 @@
       );
     };
 
-    context.beginPath();
-    var yPos=-1;
-    var xPos=-1;
-    context.moveTo(xPos, yPos);
-    while(yPos<context.canvas.height){
-      if(xPos===-1){
-        xPos=context.canvas.width+1;
-      }else{
-        xPos=-1;
-      }
-      context.lineTo(xPos,yPos);
-      yPos+=cellSize;
-      context.lineTo(xPos,yPos);
+    if(!drawGrid){return;}
+    for(var x=cellSize; x<width; x+=cellSize){
+      context.beginPath();
+      context.moveTo(x, 0);
+      context.lineTo(x, height);
+      context.stroke();
     }
-    xPos=-1;
-    context.lineTo(xPos,yPos);
-    while(xPos<context.canvas.width){
-      if(yPos===-1){
-        yPos=context.canvas.height+1;
-      }else{
-        yPos=-1;
-      }
-      context.lineTo(xPos,yPos);
-      xPos+=cellSize;
-      context.lineTo(xPos,yPos);
+    for(var y=cellSize; y<height; y+=cellSize){
+      context.beginPath();
+      context.moveTo(0, y);
+      context.lineTo(width, y);
+      context.stroke();
     }
-    context.stroke();
   }
 
   var presets={
     'R-pentomino':[[0,0], [0,-1], [1,-1], [-1,0], [0,1]],
     'Acorn':[[1,0], [2,0], [3,0], [0,-1], [1,0], [-2,-2], [-2,0], [-3,0]],
     'Diehard':[[-3,0], [-2,0], [-2,1], [2,1], [3,1], [4,1], [3,-1]],
+    'Gospers Glider Gun':[[-17,0],[-17,1],[-16,1],[-16,0],[-7,0],[-7,1],[-7,2],[-6,3],[-6,-1],[-5,-2],[-4,-2],[-5,4],[-4,4],[-3,1],[-2,-1],[-2,3],[-1,2],[-1,1],[-1,0],[0,1],[3,0],[4,0],[3,-1],[4,-1],[3,-2],[4,-2],[5,-3],[5,1],[7,1],[7,2],[7,-3],[7,-4],[17,-2],[18,-2],[18,-1],[17,-1]]
   };
 
   function main(){
     var cellSize=15;
     var playing=false;
-    var currentPreset=presets['Diehard'];
+    var currentPreset=presets['Gospers Glider Gun'];
     // currentPreset=null;
+    var drawGrid=true;
 
     var canvas=document.getElementById('game');
     canvas.width=window.innerWidth;
@@ -131,11 +121,11 @@
           activeCells.splice(cellIndex, 1);
         }
       }
+      window.activeCells=activeCells;
     });
 
     function tick(){
       activeCells=nextGen(activeCells);
-      window.activeCells=activeCells;
     }
 
     function togglePlay(){
@@ -154,7 +144,12 @@
 
     var clearButton=document.getElementById('clear');
     clearButton.addEventListener('click', ()=>{
-      activeCells = [];
+      activeCells=[];
+    });
+
+    var gridCheckbox=document.getElementById('draw-grid');
+    gridCheckbox.addEventListener('click', e=>{
+      drawGrid=e.target.checked;
     });
 
     var sizeInput=document.getElementById('cell-size');
@@ -188,7 +183,7 @@
     });
 
     function animate(){
-      draw(context, activeCells, cellSize);
+      draw(context, activeCells, cellSize, drawGrid);
       if(playing){
         tick();
       }
