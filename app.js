@@ -36,7 +36,10 @@
         }
       };
     };
-    var cellKeys=currentCells.map(function(cell){return cell.join(',')});
+    var cellKeys=[];
+    for(var i=0; i<currentCells.length; i++){
+      cellKeys[i]=currentCells[i].join(',');
+    }
     for(var key in candidates){
       var candidate=candidates[key];
       switch(candidate.count){
@@ -187,7 +190,7 @@
 
     // using keypress because it repeats
     document.addEventListener('keypress', function(e){
-      if(e.key===' '){
+      if(e.key==='t'){
         if(playing){
           togglePlay();
         }else{
@@ -197,7 +200,7 @@
     });
 
     document.addEventListener('keyup', function(e){
-      if(e.key==='Enter'){
+      if(e.key==='p'){
         togglePlay();
       }
     });
