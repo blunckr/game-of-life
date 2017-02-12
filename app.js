@@ -105,7 +105,7 @@
   function main(){
     var cellSize=10;
     var playing=false;
-    var currentPattern='Acorn';
+    var currentPattern='';
     var drawGrid=true;
 
     var canvas=document.getElementById('game');
@@ -174,7 +174,7 @@
     var sizeInput=document.getElementById('cell-size');
     sizeInput.addEventListener('keyup', function(e){
       var value = parseInt(e.target.value);
-      if(!isNaN(value)){
+      if(!isNaN(value) && value>0){
         cellSize=value;
       }
     });
